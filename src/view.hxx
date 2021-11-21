@@ -26,6 +26,7 @@ public:
     std::string initial_window_title() const;
 
     View::Position board_to_screen(Model::Position logical) const;
+    View::Position mid_bts(Model::Position logical) const;
 
     Model::Position screen_to_board(View::Position physical) const;
 

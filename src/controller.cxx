@@ -22,14 +22,19 @@ Controller::on_mouse_move(ge211::Posn<int> position)
 }
 
 void
-Controller::on_mouse_down(ge211::Mouse_button, ge211::Posn<int>)
+Controller::on_mouse_down(ge211::Mouse_button, ge211::Posn<int> p)
 {
-    moving = true;
+    ge211::Posn<int> bp = view_.screen_to_board(mouse_posn_);
+    if (model_.board_[bp.x][bp.y] == 1) {
+        moving = true;
+        ge211::Abstract_game::background_color = {255, 200, 200};
+    }
 }
 void
 Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
 {
     moving = false;
+    ge211::Abstract_game::background_color = {255, 255, 255};
 }
 
 void
@@ -48,4 +53,11 @@ std::string
 Controller::initial_window_title() const
 {
     return view_.initial_window_title();
+}
+
+void Controller::on_start()
+{
+    ge211::Abstract_game::background_color = {255, 255, 255};
+    model_.board_[0][0] = 1;
+    model_.board_[3][3] = 1;
 }

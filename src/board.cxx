@@ -67,7 +67,7 @@ Board::all_directions()
 bool
 operator==(Board const& b1, Board const& b2)
 {
-    return b1.dims_ == b2.dims_
+    return b1.dims_ == b2.dims_;
 }
 
 int

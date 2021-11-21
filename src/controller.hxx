@@ -31,6 +31,7 @@ protected:
     void on_mouse_move(ge211::Posn<int>) override;
     void on_mouse_down(ge211::Mouse_button, ge211::Posn<int>) override;
     void on_mouse_up(ge211::Mouse_button, ge211::Posn<int>) override;
+    void on_start() override;
 
     // These three delegate to the view:
     void draw(ge211::Sprite_set&) override;

@@ -17,7 +17,8 @@ public:
     using Position = Board::Position;
 
     /// Model rectangles will use `int` coordinates, as board rectangles do.
-    using Rectangle = Board::Rectangle;
+    // using Rectangle = Board::Rectangle;
+    using Rectangle = std::vector<std::vector<int>>;
 
     /// Constructs a model with `size` as both its width and height.
     ///
@@ -37,12 +38,13 @@ public:
 
     /// Returns a rectangle containing all the positions of the board.
     /// This can be used to iterate over the positions.
-    Rectangle board() const;
+    Board::Rectangle board() const;
 
 
     // bool evaluate_position_(Position pos) const;
 
-    Board board_;
+    // Board board_;
+    Rectangle board_;
 
 #ifdef CS211_TESTING
     // When this class is compiled for testing, members of a struct named
@@ -54,7 +56,7 @@ private:
     //
     // PRIVATE MEMBER VARIABLES
     //
-
+    Dimensions dims_;
 };
 
 

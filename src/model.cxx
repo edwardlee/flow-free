@@ -8,15 +8,15 @@ Model::Model(int size)
 { }
 
 Model::Model(int width, int height)
-        : board_({width, height})
+        : board_(height, std::vector<int>(width, 0)),
+          dims_(width, height)
 {
-    // TODO
 }
 
-Model::Rectangle
+Board::Rectangle
 Model::board() const
 {
-    return board_.all_positions();
+    return Board::Rectangle::from_top_left(the_origin, dims_);
 }
 
 // bool

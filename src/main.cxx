@@ -3,7 +3,7 @@
 int
 main()
 {
-    Controller().run();
+    Controller(4).run();
 
     return 0;
 }
