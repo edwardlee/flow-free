@@ -8,7 +8,9 @@ Model::Model(int size)
 { }
 
 Model::Model(int width, int height)
-        : board_(height, std::vector<int>(width, 0)),
+        : endpts_(height, std::vector<int>(width, 0)),
+          horiz_conns_(width - 1, std::vector<int>(height, 0)),
+          vert_conns_(width, std::vector<int>(height - 1, 0)),
           dims_(width, height)
 {
 }

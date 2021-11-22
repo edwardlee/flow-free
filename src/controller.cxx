@@ -8,33 +8,48 @@ Controller::Controller(int size)
 Controller::Controller(int width, int height)
         : model_(width, height),
           view_(model_),
-          moving{false},
-          mouse_posn_{0, 0}
+          moving_{false},
+          mouse_posn_{0, 0},
+          cur_posn_{-1, -1}
 { }
 
 void
-Controller::on_mouse_move(ge211::Posn<int> position)
+Controller::on_mouse_move(ge211::Posn<int> mp)
 {
-    mouse_posn_ = position;
-    if (moving) {
-        // model_.evaluate_position_(position);
+    ge211::Posn<int> p = view_.screen_to_board(mp);
+    if (moving_) {
+        if(p.x - cur_posn_.x == 1 && p.y == cur_posn_.y) {
+            model_.horiz_conns_[cur_posn_.x][p.y] = 1;
+            cur_posn_ = p;
+        } else if(p.y - cur_posn_.y == 1 && p.x == cur_posn_.x) {
+            model_.vert_conns_[p.x][cur_posn_.y] = 1;
+            cur_posn_ = p;
+        } else if(p.x - cur_posn_.x == -1 && p.y == cur_posn_.y) {
+            model_.horiz_conns_[p.x][cur_posn_.y] = 1;
+            cur_posn_ = p;
+        } else if(p.y - cur_posn_.y == -1 && p.x == cur_posn_.x) {
+            model_.vert_conns_[cur_posn_.x][p.y] = 1;
+            cur_posn_ = p;
+        }
     }
 }
 
 void
 Controller::on_mouse_down(ge211::Mouse_button, ge211::Posn<int> p)
 {
-    ge211::Posn<int> bp = view_.screen_to_board(mouse_posn_);
-    if (model_.board_[bp.x][bp.y] == 1) {
-        moving = true;
+    ge211::Posn<int> bp = view_.screen_to_board(p);
+    if (model_.endpts_[bp.x][bp.y] != 0) {
+        moving_ = true;
         ge211::Abstract_game::background_color = {255, 200, 200};
+        cur_posn_ = bp;
     }
 }
 void
 Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
 {
-    moving = false;
+    moving_ = false;
     ge211::Abstract_game::background_color = {255, 255, 255};
+    cur_posn_ = {-1, -1};
 }
 
 void
@@ -58,6 +73,10 @@ Controller::initial_window_title() const
 void Controller::on_start()
 {
     ge211::Abstract_game::background_color = {255, 255, 255};
-    model_.board_[0][0] = 1;
-    model_.board_[3][3] = 1;
+    model_.endpts_[0][0] = 1;
+    model_.endpts_[1][1] = 2;
+    model_.endpts_[2][1] = 3;
+    model_.endpts_[3][3] = 1;
+    // model_.horiz_conns_[0][0] = 1;
+    // model_.vert_conns_[0][0] = 1;
 }

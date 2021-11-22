@@ -43,4 +43,5 @@ private:
     View  view_;
     bool moving;
     View::Position mouse_posn_;
+    View::Position cur_posn_;
 };

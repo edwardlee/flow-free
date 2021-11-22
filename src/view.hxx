@@ -26,6 +26,11 @@ public:
     std::string initial_window_title() const;
 
     View::Position board_to_screen(Model::Position logical) const;
+
+    /// Converts pixel positions to positions on the board.
+    Model::Position screen_to_board(View::Position physical) const;
+    View::Position vert_conn_mid_bts(Model::Position logical) const;
+    View::Position horiz_conn_mid_bts(Model::Position logical) const;
     View::Position mid_bts(Model::Position logical) const;
 
     Model::Position screen_to_board(View::Position physical) const;
@@ -33,6 +38,11 @@ public:
 private:
     Model const& model_;
     ge211::Rectangle_sprite tile_sprite_;
+    ge211::Rectangle_sprite vert_conn_sprite_;
+    ge211::Rectangle_sprite horiz_conn_sprite_;
     ge211::Circle_sprite dark_sprite_;
     ge211::Circle_sprite light_sprite_;
+    ge211::Circle_sprite red_;
+    ge211::Circle_sprite green_;
+    ge211::Circle_sprite blue_;
 };
