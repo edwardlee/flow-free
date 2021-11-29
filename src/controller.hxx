@@ -31,6 +31,7 @@ protected:
     void on_mouse_move(ge211::Posn<int>) override;
     void on_mouse_down(ge211::Mouse_button, ge211::Posn<int>) override;
     void on_mouse_up(ge211::Mouse_button, ge211::Posn<int>) override;
+    void on_key(ge211::events::Key key) override;
     void on_start() override;
 
     // These three delegate to the view:
@@ -44,4 +45,5 @@ private:
     bool moving;
     View::Position mouse_posn_;
     View::Position cur_posn_;
+    int orig_;
 };

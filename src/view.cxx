@@ -34,27 +34,20 @@ View::draw(Sprite_set& set, Position posn)
     }
     for (int i = 0; i < model_.dims().width; i++) {
         for (int j = 0; j < model_.dims().height; j++) {
-            switch (model_.endpts_[i][j]) {
-            case 1:
-                set.add_sprite(endpts_[red], mid_bts({i, j}), 2);
-                break;
-            case 2:
-                set.add_sprite(endpts_[blue], mid_bts({i, j}), 2);
-                break;
-            case 3:
-                set.add_sprite(endpts_[green], mid_bts({i, j}), 2);
-                break;
-            }
+            if(model_.endpts_[i][j])
+                set.add_sprite(endpts_[model_.endpts_[i][j] - 1], mid_bts({i, j}),
+                           2);
         }
     }
 
     for (int i = 0; i < model_.vert_conns_.size(); i++) {
         for (int j = 0; j < model_.vert_conns_[0].size(); j++) {
             if (model_.vert_conns_[i][j] != 0) {
-                set.add_sprite(vert_conns_[red], vert_conn_mid_bts({i, j}), 1);
-                set.add_sprite(corners_[red], vert_conn_mid_bts({i, j})
+                size_t c = model_.vert_conns_[i][j] - 1;
+                set.add_sprite(vert_conns_[c], vert_conn_mid_bts({i, j}), 1);
+                set.add_sprite(corners_[c], vert_conn_mid_bts({i, j})
                 .up_by(grid_size/8), 1);
-                set.add_sprite(corners_[red], vert_conn_mid_bts({i, j+1}).up_by
+                set.add_sprite(corners_[c], vert_conn_mid_bts({i, j+1}).up_by
                 (grid_size/8), 1);
             }
         }
@@ -62,10 +55,13 @@ View::draw(Sprite_set& set, Position posn)
     for (int i = 0; i < model_.horiz_conns_.size(); ++i) {
         for (int j = 0; j < model_.horiz_conns_[0].size(); ++j) {
             if (model_.horiz_conns_[i][j] != 0) {
-                set.add_sprite(horiz_conns_[red], horiz_conn_mid_bts({i, j}),
+                size_t c = model_.horiz_conns_[i][j] - 1;
+                set.add_sprite(horiz_conns_[c], horiz_conn_mid_bts({i, j}),
                                1);
-                set.add_sprite(corners_[red], horiz_conn_mid_bts({i, j}).left_by(grid_size/8), 1);
-                set.add_sprite(corners_[red], horiz_conn_mid_bts({i+1, j}).left_by(grid_size/8), 1);
+                set.add_sprite(corners_[c], horiz_conn_mid_bts({i, j})
+                .left_by(grid_size/8), 1);
+                set.add_sprite(corners_[c], horiz_conn_mid_bts({i+1, j})
+                .left_by(grid_size/8), 1);
             }
         }
     }
