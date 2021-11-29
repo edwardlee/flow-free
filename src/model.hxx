@@ -28,8 +28,7 @@ public:
 
     /// Constructs a model with the given width and height.
     ///
-    /// ## Errors
-    ///
+    /// ERRORS:
     ///  - Throws `ge211::Client_logic_error` if either dimension is less
     ///    than 4 or greater than 8.
     Model(int width, int height);

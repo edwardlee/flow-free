@@ -1,4 +1,3 @@
-
 #include "controller.hxx"
 
 Controller::Controller(int size)

@@ -1,36 +1,57 @@
-
 #include "view.hxx"
 
-// Convenient type aliases:
-// using Color = ge211::Color;
 using Sprite_set = ge211::Sprite_set;
 
-// You can change this or even determine it some other way:
-static int const grid_size = 120;
+static int const grid_size = 80;
 static int const circle_radius_l = grid_size / 3;
 static int const circle_radius_s = grid_size / 8;
 
 // Colors
-enum Color { red, green, blue };
-
-
+enum Color
+{
+    red, blue, green, yellow, orange, teal, pink, purple, white
+};
 static ge211::Color const tile_color {15, 15, 0};
 
 View::View(Model const& model)
         : model_(model),
           tile_sprite_({grid_size, grid_size}, tile_color),
-          vert_conn_sprite_({grid_size/4, grid_size}, light_color),
-          horiz_conn_sprite_({grid_size, grid_size/4}, light_color),
-          dark_sprite_(circle_radius_l, dark_color),
-          light_sprite_(circle_radius_l, light_color)
-// You may want to add sprite initialization here
-{ }
+          moves_("Moves: 0", ge211::Font("sans.ttf", 52))
+{
+    ge211::Color* colors = new ge211::Color[9];
+    colors[red] = {255,0,0};
+    colors[blue] = {0,0,255};
+    colors[green] = {0,255,0};
+    colors[yellow] = {255,255,0};
+    colors[orange] = {255,128,0};
+    colors[teal] = {0,128,128};
+    colors[pink] = {255,192,203};
+    colors[purple] = {128,0,128};
+    colors[white] = {255,255,255};
+
+    for(int i = red; i <= white; ++i) {
+        corners_.push_back(ge211::Circle_sprite(circle_radius_s, colors[i]));
+        horiz_conns_.push_back(ge211::Rectangle_sprite({grid_size, grid_size
+        / 4}, colors[i]));
+        vert_conns_.push_back(ge211::Rectangle_sprite({grid_size / 4,
+                                                       grid_size}, colors[i]));
+        endpts_.push_back(ge211::Circle_sprite(circle_radius_l, colors[i]));
+    }
+
+    // ge211::Text_sprite::Builder builder({"sans.ttf", 52});
+    // builder.color(ge211::Color::black());
+    // builder << std::fixed
+    //         << 100 << '%';
+    // moves_.reconfigure(builder);
+}
 
 void
 View::draw(Sprite_set& set, Position posn)
 {
-    for (auto p : model_.board()) {
-        set.add_sprite(tile_sprite_, board_to_screen(p), 0);
+    for (int i = 0; i < model_.dims().width; i++) {
+        for (int j = 0; j < model_.dims().height; j++) {
+            set.add_sprite(tile_sprite_, board_to_screen({i, j}), 0);
+        }
     }
     for (int i = 0; i < model_.dims().width; i++) {
         for (int j = 0; j < model_.dims().height; j++) {

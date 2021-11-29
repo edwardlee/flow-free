@@ -25,6 +25,7 @@ public:
 
     std::string initial_window_title() const;
 
+    /// Converts positions on the board to pixel positions.
     View::Position board_to_screen(Model::Position logical) const;
 
     /// Converts pixel positions to positions on the board.
@@ -32,8 +33,6 @@ public:
     View::Position vert_conn_mid_bts(Model::Position logical) const;
     View::Position horiz_conn_mid_bts(Model::Position logical) const;
     View::Position mid_bts(Model::Position logical) const;
-
-    Model::Position screen_to_board(View::Position physical) const;
 
 private:
     Model const& model_;

@@ -1,4 +1,3 @@
-
 #include "model.hxx"
 
 using namespace ge211;
@@ -15,16 +14,32 @@ Model::Model(int width, int height)
 {
 }
 
-Board::Rectangle
-Model::board() const
+Model::Dimensions
+Model::dims() const
 {
-    return Board::Rectangle::from_top_left(the_origin, dims_);
+    return dims_;
 }
 
-// bool
-// Model::evaluate_position_(Position pos) const
-// {
-//     if(board_[pos] != -1)
-//         return true;
-//     return board_[pos] == -1;
-// }
+Model::TwoVec
+Model::endpts() const
+{
+    return endpts_;
+}
+
+Model::TwoVec
+Model::horiz_conns() const
+{
+    return horiz_conns_;
+}
+
+Model::TwoVec
+Model::vert_conns() const
+{
+    return vert_conns_;
+}
+
+void
+Model::place_conn(Position p)
+{
+    // TODO
+}
