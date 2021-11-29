@@ -38,11 +38,9 @@ public:
 private:
     Model const& model_;
     ge211::Rectangle_sprite tile_sprite_;
-    ge211::Rectangle_sprite vert_conn_sprite_;
-    ge211::Rectangle_sprite horiz_conn_sprite_;
-    ge211::Circle_sprite dark_sprite_;
-    ge211::Circle_sprite light_sprite_;
-    ge211::Circle_sprite red_;
-    ge211::Circle_sprite green_;
-    ge211::Circle_sprite blue_;
+    std::vector<ge211::Rectangle_sprite> vert_conns_;
+    std::vector<ge211::Rectangle_sprite> horiz_conns_;
+    std::vector<ge211::Circle_sprite> endpts_;
+    std::vector<ge211::Circle_sprite> corners_;
+    ge211::Text_sprite moves_;
 };
