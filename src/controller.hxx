@@ -46,4 +46,6 @@ private:
     View::Position mouse_posn_;
     View::Position cur_posn_;
     int orig_;
+    void overlap(ge211::Posn<int> p, bool dir);
+    int completed_;
 };
