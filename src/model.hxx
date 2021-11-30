@@ -38,26 +38,18 @@ public:
     /// A reader for the model's dimensions.
     Dimensions dims() const;
 
-    /// A reader for the endpoints twovec.
-    TwoVec endpts() const;
-
-    /// A reader for the horizontal connections twovec.
-    TwoVec horiz_conns() const;
-
-    /// A reader for the vertical connections twovec.
-    TwoVec vert_conns() const;
-
-    /// Places a connection in the valid connections vector.
-    void place_conn(Position p);
+    ///
+    /// PUBLIC MEMBER VARIABLES
+    ///
 
     /// A twovec representing endpoints.
-    TwoVec endpts_;
+    TwoVec endpts;
 
     /// A twovec representing horizontal connections.
-    TwoVec horiz_conns_;
+    TwoVec horiz_conns;
 
     /// A twovec representing vertical connections.
-    TwoVec vert_conns_;
+    TwoVec vert_conns;
 
 #ifdef CS211_TESTING
     // When this class is compiled for testing, members of a struct named

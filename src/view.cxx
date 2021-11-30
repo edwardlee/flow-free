@@ -55,16 +55,16 @@ View::draw(Sprite_set &set)
     }
     for (int i = 0; i < model_.dims().width; i++) {
         for (int j = 0; j < model_.dims().height; j++) {
-            if(model_.endpts_[i][j])
-                set.add_sprite(endpts_[model_.endpts_[i][j] - 1], mid_bts({i, j}),
+            if(model_.endpts[i][j])
+                set.add_sprite(endpts_[model_.endpts[i][j] - 1], mid_bts({i, j}),
                            2);
         }
     }
 
-    for (int i = 0; i < model_.vert_conns_.size(); i++) {
-        for (int j = 0; j < model_.vert_conns_[0].size(); j++) {
-            if (model_.vert_conns_[i][j] != 0) {
-                size_t c = model_.vert_conns_[i][j] - 1;
+    for (int i = 0; i < model_.vert_conns.size(); i++) {
+        for (int j = 0; j < model_.vert_conns[0].size(); j++) {
+            if (model_.vert_conns[i][j] != 0) {
+                size_t c = model_.vert_conns[i][j] - 1;
                 set.add_sprite(vert_conns_[c], vert_conn_mid_bts({i, j}), 1);
                 set.add_sprite(corners_[c], vert_conn_mid_bts({i, j})
                 .up_by(grid_size/8), 1);
@@ -73,10 +73,10 @@ View::draw(Sprite_set &set)
             }
         }
     }
-    for (int i = 0; i < model_.horiz_conns_.size(); ++i) {
-        for (int j = 0; j < model_.horiz_conns_[0].size(); ++j) {
-            if (model_.horiz_conns_[i][j] != 0) {
-                size_t c = model_.horiz_conns_[i][j] - 1;
+    for (int i = 0; i < model_.horiz_conns.size(); ++i) {
+        for (int j = 0; j < model_.horiz_conns[0].size(); ++j) {
+            if (model_.horiz_conns[i][j] != 0) {
+                size_t c = model_.horiz_conns[i][j] - 1;
                 set.add_sprite(horiz_conns_[c], horiz_conn_mid_bts({i, j}),
                                1);
                 set.add_sprite(corners_[c], horiz_conn_mid_bts({i, j})
@@ -93,8 +93,8 @@ View::draw(Sprite_set &set)
 View::Dimensions
 View::initial_window_dimensions() const
 {
-    return {(grid_size + 1) * (int) model_.endpts_[0].size() + 1,
-            (grid_size + 1) * (int) model_.endpts_.size() + 70};
+    return {(grid_size + 1) * (int) model_.endpts[0].size() + 1,
+            (grid_size + 1) * (int) model_.endpts.size() + 70};
 }
 
 std::string
