@@ -1,7 +1,5 @@
 #pragma once
 
-#include "board.hxx"
-
 #include <ge211.hxx>
 
 #include <iostream>

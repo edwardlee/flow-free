@@ -14,11 +14,11 @@ enum Color
 static ge211::Color const tile_color {15, 15, 0};
 
 View::View(Model const& model)
-        : model_(model),
-          tile_sprite_({grid_size, grid_size}, tile_color),
-          moves_("Moves: 0", ge211::Font("sans.ttf", 52))
+        : moves {},
+          model_(model),
+          tile_sprite_({grid_size, grid_size}, tile_color)
 {
-    ge211::Color* colors = new ge211::Color[9];
+    auto* colors = new ge211::Color[9];
     colors[red] = {255,0,0};
     colors[blue] = {0,0,255};
     colors[green] = {0,255,0};
@@ -38,15 +38,15 @@ View::View(Model const& model)
         endpts_.push_back(ge211::Circle_sprite(circle_radius_l, colors[i]));
     }
 
-    // ge211::Text_sprite::Builder builder({"sans.ttf", 52});
-    // builder.color(ge211::Color::black());
-    // builder << std::fixed
-    //         << 100 << '%';
-    // moves_.reconfigure(builder);
+    auto sans52 = ge211::Font("sans.ttf", 52);
+    auto builder = ge211::Text_sprite::Builder(sans52);
+    builder.color(ge211::Color::black());
+    builder << "Moves";
+    moves.reconfigure(builder);
 }
 
 void
-View::draw(Sprite_set& set, Position posn)
+View::draw(Sprite_set &set)
 {
     for (int i = 0; i < model_.dims().width; i++) {
         for (int j = 0; j < model_.dims().height; j++) {
@@ -87,52 +87,52 @@ View::draw(Sprite_set& set, Position posn)
         }
     }
 
-    set.add_sprite(moves_, {0, 384}, 3);
+    set.add_sprite(moves, {0, grid_size * model_.dims().width}, 3);
 }
 
 View::Dimensions
 View::initial_window_dimensions() const
 {
-    return ge211::Dims<int>((grid_size + 1) * model_.endpts_[0].size() + 1,
-                            (grid_size + 1) * model_.endpts_.size() + 70);
+    return {(grid_size + 1) * (int) model_.endpts_[0].size() + 1,
+            (grid_size + 1) * (int) model_.endpts_.size() + 70};
 }
 
 std::string
-View::initial_window_title() const
+View::initial_window_title()
 {
     return "Flow Free";
 }
 
 View::Position
-View::board_to_screen(Model::Position logical) const
+View::board_to_screen(Model::Position logical)
 {
     return View::Position {(1 + logical.x) + grid_size * logical.x,
                            (1 + logical.y) + grid_size * logical.y};
 }
 
 View::Position
-View::mid_bts(Model::Position logical) const
+View::mid_bts(Model::Position logical)
 {
     return board_to_screen(logical).down_right_by({grid_size / 6,
                                                    grid_size / 6});
 }
 
 View::Position
-View::vert_conn_mid_bts(Model::Position logical) const
+View::vert_conn_mid_bts(Model::Position logical)
 {
     return board_to_screen(logical).down_right_by({grid_size * 3 / 8,
                                                    grid_size / 2});
 }
 
 View::Position
-View::horiz_conn_mid_bts(Model::Position logical) const
+View::horiz_conn_mid_bts(Model::Position logical)
 {
     return board_to_screen(logical).down_right_by({grid_size / 2,
                                                    grid_size * 3 / 8});
 }
 
 Model::Position
-View::screen_to_board(View::Position physical) const
+View::screen_to_board(View::Position physical)
 {
     return Model::Position {int(std::floor(physical.x / grid_size)),
                             int(std::floor(physical.y / grid_size))};

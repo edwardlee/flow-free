@@ -19,20 +19,22 @@ public:
     /// Constructs a view that knows about the given model.
     explicit View(Model const&);
 
-    void draw(ge211::Sprite_set& set, Position posn);
+    void draw(ge211::Sprite_set &set);
 
     Dimensions initial_window_dimensions() const;
 
-    std::string initial_window_title() const;
+    static std::string initial_window_title() ;
 
     /// Converts positions on the board to pixel positions.
-    View::Position board_to_screen(Model::Position logical) const;
+    static View::Position board_to_screen(Model::Position logical) ;
 
     /// Converts pixel positions to positions on the board.
-    Model::Position screen_to_board(View::Position physical) const;
-    View::Position vert_conn_mid_bts(Model::Position logical) const;
-    View::Position horiz_conn_mid_bts(Model::Position logical) const;
-    View::Position mid_bts(Model::Position logical) const;
+    static Model::Position screen_to_board(View::Position physical) ;
+    static View::Position vert_conn_mid_bts(Model::Position logical) ;
+    static View::Position horiz_conn_mid_bts(Model::Position logical) ;
+    static View::Position mid_bts(Model::Position logical) ;
+
+    ge211::Text_sprite moves;
 
 private:
     Model const& model_;
@@ -41,5 +43,4 @@ private:
     std::vector<ge211::Rectangle_sprite> horiz_conns_;
     std::vector<ge211::Circle_sprite> endpts_;
     std::vector<ge211::Circle_sprite> corners_;
-    ge211::Text_sprite moves_;
 };

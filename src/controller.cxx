@@ -8,9 +8,11 @@ Controller::Controller(int width, int height)
         : model_(width, height),
           view_(model_),
           moving_ {false},
-          mouse_posn_ {0, 0},
+          ori_posn_ {-1,-1},
           cur_posn_ {-1, -1},
-          completed_ {0}
+          orig_ {0},
+          completed_ {0},
+          moves_ {0}
 { }
 
 void
@@ -103,10 +105,10 @@ Controller::overlap(ge211::Posn<int> p, bool dir)
 void
 Controller::on_mouse_move(ge211::Posn<int> mp)
 {
-    ge211::Posn<int> p = view_.screen_to_board(mp);
+    ge211::Posn<int> p = View::screen_to_board(mp);
     if (moving_ && p.x >= 0 && p.x < model_.dims().width && p.y >= 0 && p.y <
-        model_.dims().height && (!model_.endpts_[p.x][p.y] || model_
-                                              .endpts_[p.x][p.y] == orig_)) {
+        model_.dims().height && (!model_.endpts_[p.x][p.y] || (model_
+                                .endpts_[p.x][p.y] == orig_ && p != ori_posn_))) {
         if (p.x - cur_posn_.x == 1 && p.y == cur_posn_.y) {
             overlap(p, false);
             model_.horiz_conns_[cur_posn_.x][p.y] = orig_;
@@ -130,11 +132,12 @@ Controller::on_mouse_move(ge211::Posn<int> mp)
 void
 Controller::on_mouse_down(ge211::Mouse_button, ge211::Posn<int> p)
 {
-    ge211::Posn<int> bp = view_.screen_to_board(p);
+    ge211::Posn<int> bp = View::screen_to_board(p);
+    cur_posn_ = bp;
     if (model_.endpts_[bp.x][bp.y] != 0) {
         moving_ = true;
-        cur_posn_ = bp;
         orig_ = model_.endpts_[bp.x][bp.y];
+        ori_posn_ = bp;
         for (auto& row: model_.horiz_conns_) {
             for (auto& elem: row) {
                 if (elem == model_.endpts_[bp.x][bp.y]) {
@@ -156,7 +159,7 @@ void
 Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
 {
     moving_ = false;
-    if(model_.endpts_[cur_posn_.x][cur_posn_.y] == orig_) {
+    if(model_.endpts_[cur_posn_.x][cur_posn_.y] == orig_ && cur_posn_ != ori_posn_) {
         ge211::audio::Sound_effect s1("pitch" + std::to_string
         (++completed_) + ".mp3",
                                       mixer());
@@ -165,12 +168,17 @@ Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
     cur_posn_ = {-1, -1};
     if(completed_ > 8)
         completed_ = 0;
+    auto sans52 = ge211::Font("sans.ttf", 52);
+    auto builder = ge211::Text_sprite::Builder(sans52);
+    builder.color(ge211::Color::black());
+    builder << "Moves  " << ++moves_;
+    view_.moves.reconfigure(builder);
 }
 
 void
 Controller::draw(ge211::Sprite_set& sprites)
 {
-    view_.draw(sprites, mouse_posn_);
+    view_.draw(sprites);
 }
 
 View::Dimensions
@@ -182,7 +190,7 @@ Controller::initial_window_dimensions() const
 std::string
 Controller::initial_window_title() const
 {
-    return view_.initial_window_title();
+    return View::initial_window_title();
 }
 
 void
@@ -191,6 +199,8 @@ Controller::on_key(ge211::events::Key key)
     if (key == ge211::Key::code('r')) {
         moving_ = false;
         cur_posn_ = {-1, -1};
+        completed_ = 0;
+        moves_ = 0;
         for (auto& elem: model_.horiz_conns_) {
             std::fill(elem.begin(), elem
                     .end(), 0);
@@ -199,6 +209,12 @@ Controller::on_key(ge211::events::Key key)
             std::fill(elem.begin(), elem
                     .end(), 0);
         }
+
+        auto sans52 = ge211::Font("sans.ttf", 52);
+        auto builder = ge211::Text_sprite::Builder(sans52);
+        builder.color(ge211::Color::black());
+        builder << "Moves";
+        view_.moves.reconfigure(builder);
     }
 }
 

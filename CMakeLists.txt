@@ -5,7 +5,6 @@ include(.cs211/cmake/CMakeLists.txt)
 # Defines a variable to stand for the .cxx files that implement
 # the model.
 set(MODEL_SRC
-        src/board.cxx
         src/model.cxx)
 
 # Adds a program named `flow-free` built from the listed source
