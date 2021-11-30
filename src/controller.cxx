@@ -15,88 +15,35 @@ Controller::Controller(int width, int height)
           moves_ {0}
 { }
 
+void Controller::cleanup(int c) {
+    if(c != orig_) {
+        for (auto& row: model_.horiz_conns_)
+            for (auto& elem: row)
+                if (elem == c)
+                    elem = 0;
+        for (auto& row: model_.vert_conns_)
+            for (auto& elem: row)
+                if (elem == c)
+                    elem = 0;
+    }
+}
+
 void
 Controller::overlap(ge211::Posn<int> p, bool dir)
 {
     if (dir) {
         if (p.x < model_.dims().width - 1) {
             if(model_.horiz_conns_[p.x][p.y] != 0) {
-                int c = model_.horiz_conns_[p.x][p.y];
-                if(c != orig_) {
-                    for (auto& row: model_.horiz_conns_) {
-                        for (auto& elem: row) {
-                            if (elem == c) {
-                                elem = 0;
-                            }
-                        }
-                    }
-                    for (auto& row: model_.vert_conns_) {
-                        for (auto& elem: row) {
-                            if (elem == c) {
-                                elem = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            else if(p.x > 0 && model_.horiz_conns_[p.x - 1][p.y] != 0) {
-                int c = model_.horiz_conns_[p.x - 1][p.y];
-                if(c != orig_) {
-                    for (auto& row: model_.horiz_conns_) {
-                        for (auto& elem: row) {
-                            if (elem == c) {
-                                elem = 0;
-                            }
-                        }
-                    }
-                    for (auto& row: model_.vert_conns_) {
-                        for (auto& elem: row) {
-                            if (elem == c) {
-                                elem = 0;
-                            }
-                        }
-                    }
-                }
+                cleanup(model_.horiz_conns_[p.x][p.y]);
+            } else if(p.x > 0 && model_.horiz_conns_[p.x - 1][p.y] != 0) {
+                cleanup(model_.horiz_conns_[p.x - 1][p.y]);
             }
         }
     } else {
         if (model_.vert_conns_[p.x][p.y] != 0) {
-            int c = model_.vert_conns_[p.x][p.y];
-            if(c != orig_) {
-                for (auto& row: model_.horiz_conns_) {
-                    for (auto& elem: row) {
-                        if (elem == c) {
-                            elem = 0;
-                        }
-                    }
-                }
-                for (auto& row: model_.vert_conns_) {
-                    for (auto& elem: row) {
-                        if (elem == c) {
-                            elem = 0;
-                        }
-                    }
-                }
-            }
-        }
-        else if(p.y > 0 && model_.vert_conns_[p.x][p.y - 1] != 0) {
-            int c = model_.vert_conns_[p.x][p.y - 1];
-            if(c != orig_) {
-                for (auto& row: model_.horiz_conns_) {
-                    for (auto& elem: row) {
-                        if (elem == c) {
-                            elem = 0;
-                        }
-                    }
-                }
-                for (auto& row: model_.vert_conns_) {
-                    for (auto& elem: row) {
-                        if (elem == c) {
-                            elem = 0;
-                        }
-                    }
-                }
-            }
+            cleanup(model_.vert_conns_[p.x][p.y]);
+        } else if(p.y > 0 && model_.vert_conns_[p.x][p.y - 1] != 0) {
+            cleanup(model_.vert_conns_[p.x][p.y - 1]);
         }
     }
 }
@@ -136,22 +83,9 @@ Controller::on_mouse_down(ge211::Mouse_button, ge211::Posn<int> p)
     cur_posn_ = bp;
     if (model_.endpts_[bp.x][bp.y] != 0) {
         moving_ = true;
+        cleanup(model_.endpts_[bp.x][bp.y]);
         orig_ = model_.endpts_[bp.x][bp.y];
         ori_posn_ = bp;
-        for (auto& row: model_.horiz_conns_) {
-            for (auto& elem: row) {
-                if (elem == model_.endpts_[bp.x][bp.y]) {
-                    elem = 0;
-                }
-            }
-        }
-        for (auto& row: model_.vert_conns_) {
-            for (auto& elem: row) {
-                if (elem == model_.endpts_[bp.x][bp.y]) {
-                    elem = 0;
-                }
-            }
-        }
     }
 }
 
@@ -165,6 +99,7 @@ Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
                                       mixer());
         mixer().play_effect(s1);
     }
+    orig_ = -1;
     cur_posn_ = {-1, -1};
     if(completed_ > 8)
         completed_ = 0;

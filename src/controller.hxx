@@ -49,4 +49,6 @@ private:
     void overlap(ge211::Posn<int> p, bool dir);
     int completed_;
     int moves_;
+
+    void cleanup(int c);
 };
