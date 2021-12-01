@@ -43,4 +43,5 @@ private:
     std::vector<ge211::Rectangle_sprite> horiz_conns_;
     std::vector<ge211::Circle_sprite> endpts_;
     std::vector<ge211::Circle_sprite> corners_;
+    ge211::Image_sprite solved_ui_;
 };

@@ -3,7 +3,7 @@
 #include "model.hxx"
 #include "view.hxx"
 
-/// The main game class for Reversi.
+/// The main game class for Flow Free.
 class Controller : public ge211::Abstract_game
 {
 public:

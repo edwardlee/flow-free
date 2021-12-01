@@ -39,6 +39,21 @@ public:
     /// A reader for the model's dimensions.
     Dimensions dims() const;
 
+    /// Resets the model state.
+    void reset();
+
+    /// Clears all spots on the board with color c.
+    void cleanup(int c);
+
+    /// Handles player drawing over an existing connection.
+    void overlap(ge211::Posn<int> p, bool dir);
+
+    /// A reader for if the model is solved.
+    bool solved() const;
+
+    /// What instantiate does.
+    void instantiate();
+
     ///
     /// PUBLIC MEMBER VARIABLES
     ///
@@ -76,8 +91,3 @@ private:
     //
     Dimensions dims_;
 };
-
-
-
-
-

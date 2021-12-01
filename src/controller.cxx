@@ -107,27 +107,44 @@ Controller::initial_window_title() const
 void
 Controller::on_key(ge211::events::Key key)
 {
+    /// Resetting the controller (and subsequently the model)
+    /// when the player presses r.
     if (key == ge211::Key::code('r')) {
         moving_ = false;
         cur_posn_ = {-1, -1};
         model_.completed = 0;
         moves_ = 0;
-        for (auto& elem: model_.horiz_conns) {
-            std::fill(elem.begin(), elem
-                    .end(), 0);
-        }
-        for (auto& elem: model_.vert_conns) {
-            std::fill(elem.begin(), elem
-                    .end(), 0);
-        }
-
-        auto sans52 = ge211::Font("sans.ttf", 52);
-        auto builder = ge211::Text_sprite::Builder(sans52);
+        model_.reset();
+        auto sans42 = ge211::Font("sans.ttf", 42);
+        auto builder = ge211::Text_sprite::Builder(sans42);
         builder.color(ge211::Color::black());
         builder << "Moves";
         view_.moves.reconfigure(builder);
         ge211::Abstract_game::background_color = ge211::Color::white();
         ttc_ = ge211::Timer();
+    }
+
+    /// If the model is in the solved state, allow the
+    /// player to press n to go to next level or q to quit.
+    if (model_.solved()) {
+        if (key == ge211::Key::code('n')) {
+            moving_ = false;
+            cur_posn_ = {-1, -1};
+            model_.completed = 0;
+            moves_ = 0;
+            model_.reset();
+            model_.instantiate();
+            auto sans42 = ge211::Font("sans.ttf", 42);
+            auto builder = ge211::Text_sprite::Builder(sans42);
+            builder.color(ge211::Color::black());
+            builder << "Moves";
+            view_.moves.reconfigure(builder);
+            ge211::Abstract_game::background_color = ge211::Color::white();
+            ttc_ = ge211::Timer();
+        }
+        if (key == ge211::Key::code('q')) {
+            quit();
+        }
     }
 }
 
