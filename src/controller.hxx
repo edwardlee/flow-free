@@ -45,10 +45,6 @@ private:
     bool moving_;
     View::Position ori_posn_;
     View::Position cur_posn_;
-    int orig_;
-    void overlap(ge211::Posn<int> p, bool dir);
-    int completed_;
     int moves_;
-
-    void cleanup(int c);
+    ge211::Timer ttc_;
 };

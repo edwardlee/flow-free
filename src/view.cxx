@@ -38,8 +38,8 @@ View::View(Model const& model)
         endpts_.push_back(ge211::Circle_sprite(circle_radius_l, colors[i]));
     }
 
-    auto sans52 = ge211::Font("sans.ttf", 52);
-    auto builder = ge211::Text_sprite::Builder(sans52);
+    auto sans42 = ge211::Font("sans.ttf", 42);
+    auto builder = ge211::Text_sprite::Builder(sans42);
     builder.color(ge211::Color::black());
     builder << "Moves";
     moves.reconfigure(builder);
@@ -73,8 +73,8 @@ View::draw(Sprite_set &set)
             }
         }
     }
-    for (int i = 0; i < model_.horiz_conns.size(); ++i) {
-        for (int j = 0; j < model_.horiz_conns[0].size(); ++j) {
+    for (int i = 0; i < (int)model_.horiz_conns.size(); ++i) {
+        for (int j = 0; j < (int)model_.horiz_conns[0].size(); ++j) {
             if (model_.horiz_conns[i][j] != 0) {
                 size_t c = model_.horiz_conns[i][j] - 1;
                 set.add_sprite(horiz_conns_[c], horiz_conn_mid_bts({i, j}),

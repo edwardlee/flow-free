@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 class Model
 {
@@ -50,6 +51,18 @@ public:
 
     /// A twovec representing vertical connections.
     TwoVec vert_conns;
+
+    /// An integer representing color of path being drawn.
+    int orig;
+
+    /// An integer representing number of matched endpoints.
+    int completed;
+
+    /// An unordered map representing the status of each color pair.
+    std::unordered_map<int, bool> matched;
+
+    /// Chooses a level to load in.
+    ge211::Random_source<int> die;
 
 #ifdef CS211_TESTING
     // When this class is compiled for testing, members of a struct named
